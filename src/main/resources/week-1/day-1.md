@@ -107,6 +107,8 @@ GitFlow es un flujo de trabajo estructurado para Git, diseñado para proyectos q
 
 El modelo GitFlow utiliza dos ramas principales que permanecen a lo largo de toda la vida del proyecto:
 
+![gitflow-erase.png](gitflow-erase.png)
+
 - **main**: Contiene el código de producción actual.
 - **develop**: Actúa como una rama de integración para desarrollos y ajustes en curso.
 
