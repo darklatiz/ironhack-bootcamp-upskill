@@ -91,3 +91,47 @@ Roles
   - Similitudes y Diferencias (SR y Tech Lead)
     - Similitudes: Ambos roles requieren un alto nivel de competencia técnica y son cruciales para el éxito del desarrollo de software. También, ambos roles pueden involucrar algún nivel de mentoría y liderazgo. 
     - Diferencias: El Tech Lead tiene más responsabilidades en la gestión y coordinación del equipo, mientras que el Desarrollador Senior se centra más en tareas técnicas detalladas.
+
+## Trunk Base Development
+![trunk-base-development.png](trunk-base-development.png)
+- Trunk Based Development (TBD) is a streamlined branching strategy focused on maintaining a single branch.
+- Definition and Core Concepts: In Trunk Based Development, all developers commit to one central branch in the version control system. This approach minimizes the creation of additional branches by having very short-lived branches for features that are merged back into the trunk frequently.
+- Benefits: TBD promotes continuous integration and continuous delivery by encouraging frequent commits and merges into the trunk, reducing integration issues and making it easier to detect and resolve conflicts promptly. It is particularly advantageous for teams practicing DevOps or aiming for rapid release cycles, as it supports a high degree of automation and quick feedback loops.
+
+## GitFlow: Modelo de Gestión de Ramas para Git
+![gitflow.png](gitflow.png)
+
+GitFlow es un flujo de trabajo estructurado para Git, diseñado para proyectos que requieren un manejo detallado de versiones y lanzamientos. Fue propuesto por Vincent Driessen en 2010 y es ampliamente adoptado en el desarrollo de software.
+
+### Ramas Principales
+
+El modelo GitFlow utiliza dos ramas principales que permanecen a lo largo de toda la vida del proyecto:
+
+- **main**: Contiene el código de producción actual.
+- **develop**: Actúa como una rama de integración para desarrollos y ajustes en curso.
+
+### Ramas de Soporte
+
+Para manejar el desarrollo de características, preparación de lanzamientos y correcciones urgentes, GitFlow emplea varias ramas de soporte:
+
+- **feature**: Derivadas de `develop`, se usan para desarrollar nuevas características de forma aislada. Se reintegran a `develop` una vez completadas.
+- **release**: Creadas desde `develop` para preparar un nuevo lanzamiento de producción, permitiendo ajustes finales y pruebas. Al finalizar, se fusionan en `main` y `develop`.
+- **hotfix**: Originadas de `main` para corregir errores en producción. Una vez resueltos, se fusionan en `main` y `develop` para asegurar que los cambios persistan.
+
+### Flujo de Trabajo
+
+1. **Desarrollo de características**:
+  - Inicia desde `develop`.
+  - Crea una rama `feature` para cada nueva característica.
+  - Reintegra la rama `feature` a `develop` tras completar el desarrollo.
+
+2. **Preparación para el lanzamiento**:
+  - Cuando `develop` está listo para lanzamiento, se bifurca en una rama `release`.
+  - Se realizan ajustes de última hora y pruebas.
+  - Se fusiona `release` en `main` y `develop` cuando está lista para producción.
+
+3. **Correcciones urgentes**:
+  - Si se descubren errores en producción, se crea una rama `hotfix`.
+  - Tras corregir, se fusiona en `main` y `develop`.
+
+Este modelo ayuda a mantener el desarrollo organizado y facilita la gestión de lanzamientos, integración de nuevas características y la aplicación eficiente de correcciones.
