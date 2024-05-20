@@ -351,6 +351,41 @@ function testProfileUpdate_ShouldUpdatePassword() {
     }
 ```
 
+```java
+@ParameterizedTest
+@ValueSource(strings = {"email@example.com", "username@example.com", "info@domain.com"})
+void testEmailValidation_shouldBeValid(String email) {
+    assertTrue(validator.isValidEmail(email), "Email should be valid.");
+}
+```
+
+```groovy
+[Theory]
+[InlineData(1, 2, 3)]
+[InlineData(-4, -6, -10)]
+[InlineData(-2, 2, 0)]
+[InlineData(int.MinValue, -1, int.MaxValue)]
+public void CanAddTheory(int value1, int value2, int expected)
+{
+    var calculator = new Calculator();
+
+    var result = calculator.Add(value1, value2);
+
+    Assert.Equal(expected, result);
+}
+```
+
+```javascript
+describe("isPalindrome", () => {
+  it.each([
+    ["madam", true],
+    ["car", false]
+  ])("when the input is '%s'", (text, expected) => {
+    expect(isPalindrome(text)).toBe(expected);
+  });
+});
+```
+
 ### Resumen de Buenas Prácticas
 
 - **Nombres Descriptivos:** Los nombres de las pruebas deben ser específicos y describir claramente el comportamiento que se está verificando.
