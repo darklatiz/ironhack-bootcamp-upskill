@@ -1,0 +1,473 @@
+openapi: 3.0.0
+info:
+  title: Lyfto API
+  description: Esta es una API para un servicio de transporte similar a Lyft.
+  version: 1.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/LUISGONZALEZ_2/myapiprueba02/1.0.0
+  - url: https://api.tu-empresa.com/v1
+    description: Servidor principal de producción v1
+  - url: https://sandbox.tu-empresa.com/v1
+    description: Servidor de sandbox para pruebas v1
+  - url: https://api.tu-empresa.com/v2
+    description: Servidor principal de producción v2
+  - url: https://sandbox.tu-empresa.com/v2
+    description: Servidor de sandbox para pruebas v2
+components:
+  schemas:
+    Objeto:
+      type: object
+      properties:
+        prop2:
+          type: number
+          format: int
+          example: 4
+        startLocation:
+          $ref: '#/components/schemas/Driver'
+    Ride:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "ride_123"
+        userId:
+          type: string
+          example: "user_456"
+        driverId:
+          type: string
+          example: "driver_789"
+        vehicleId:
+          type: string
+          example: "vehicle_101"
+        startLocation:
+          $ref: '#/components/schemas/Location'
+        endLocation:
+          $ref: '#/components/schemas/Location'
+        status:
+          type: string
+          enum: [requested, in_progress, completed, cancelled]
+          example: "requested"
+        fare:
+          type: number
+          format: float
+          example: 25.75
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "user_456"
+        name:
+          type: string
+          example: "Juan Perez"
+        email:
+          type: string
+          example: "juan.perez@example.com"
+        phone:
+          type: string
+          example: "+521234567890"
+    Driver:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "driver_789"
+        name:
+          type: string
+          example: "Carlos Lopez"
+        rating:
+          type: number
+          format: float
+          example: 4.9
+        edad:
+          type: number
+          format: int
+          example: 25
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "vehicle_101"
+        make:
+          type: string
+          example: "Toyota"
+        model:
+          type: string
+          example: "Camry"
+        year:
+          type: integer
+          example: 2020
+        licensePlate:
+          type: string
+          example: "ABC1234"
+    Location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 37.7749
+        longitude:
+          type: number
+          format: float
+          example: -122.4194
+paths:
+  /rides:
+    post:
+      summary: Solicitar un nuevo viaje
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "user_456"
+                startLocation:
+                  $ref: '#/components/schemas/Location'
+                endLocation:
+                  $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: Viaje creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+    get:
+      summary: Obtener todos los viajes
+      responses:
+        '200':
+          description: Lista de viajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ride'
+  /rides/{rideId}:
+    get:
+      summary: Obtener un viaje por ID
+      parameters:
+        - name: rideId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "ride_123"
+      responses:
+        '200':
+          description: Detalles del viaje
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+    put:
+      summary: Actualizar el estado de un viaje
+      parameters:
+        - name: rideId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "ride_123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [requested, in_progress, completed, cancelled]
+                  example: "in_progress"
+      responses:
+        '200':
+          description: Viaje actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+  /users:
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    get:
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{userId}:
+    get:
+      summary: Obtener un usuario por ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "user_456"
+      responses:
+        '200':
+          description: Detalles del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Actualizar un usuario
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "user_456"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /drivers:
+    post:
+      summary: Crear un nuevo conductor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        '201':
+          description: Conductor creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+    get:
+      summary: Obtener todos los conductores
+      responses:
+        '200':
+          description: Lista de conductores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+  /drivers/{driverId}:
+    get:
+      summary: Obtener un conductor por ID
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "driver_789"
+      responses:
+        '200':
+          description: Detalles del conductor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+    put:
+      summary: Actualizar un conductor
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "driver_789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        '200':
+          description: Conductor actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+  /vehicles:
+    post:
+      summary: Crear un nuevo vehículo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+      responses:
+        '201':
+          description: Vehículo creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+    get:
+      summary: Obtener todos los vehículos
+      responses:
+        '200':
+          description: Lista de vehículos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+  /vehicles/{vehicleId}:
+    get:
+      summary: Obtener un vehículo por ID
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "vehicle_101"
+      responses:
+        '200':
+          description: Detalles del vehículo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+    put:
+      summary: Actualizar un vehículo
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "vehicle_101"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+      responses:
+        '200':
+          description: Vehículo actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehicle'
+  /v2/rides:
+    post:
+      summary: Solicitar un nuevo viaje
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "user_456"
+                startLocation:
+                  $ref: '#/components/schemas/Location'
+                endLocation:
+                  $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: Viaje creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+    get:
+      summary: Obtener todos los viajes
+      responses:
+        '200':
+          description: Lista de viajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ride'
+  /v2/rides/{rideId}:
+    get:
+      summary: Obtener un viaje por ID
+      parameters:
+        - name: rideId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "ride_123"
+      responses:
+        '200':
+          description: Detalles del viaje
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
+    put:
+      summary: Actualizar el estado de un viaje
+      parameters:
+        - name: rideId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "ride_123"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [requested, in_progress, completed, cancelled]
+                  example: "in_progress"
+      responses:
+        '200':
+          description: Viaje actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ride'
