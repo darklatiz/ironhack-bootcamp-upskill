@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: API para gestionar Envios
+  description: API para gestionar Envios
+  version: 1.0.0
+servers:
+  - url: 'https://api.example.com/v1'
+paths:
+  /envios:
+    get:
+      summary: Obtener todos los envíos
+      responses:
+        '200':
+          description: Lista de envíos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Envio'
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Crear un nuevo envío
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Envio'
+      responses:
+        '201':
+          description: Envío creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+        '400':
+          description: Solicitud inválida
+        '500':
+          description: Error interno del servidor
+  /envios/{id}:
+    get:
+      summary: Obtener un envío por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Envío encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+        '404':
+          description: Envío no encontrado
+        '500':
+          description: Error interno del servidor
+    put:
+      summary: Actualizar un envío por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Envio'
+      responses:
+        '200':
+          description: Envío actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Envio'
+        '400':
+          description: Solicitud inválida
+        '404':
+          description: Envío no encontrado
+        '500':
+          description: Error interno del servidor
+    delete:
+      summary: Eliminar un envío por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Envío eliminado exitosamente
+        '404':
+          description: Envío no encontrado
+        '500':
+          description: Error interno del servidor
+components:
+  schemas:
+    Envio:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID del envío
+        destino:
+          type: string
+          description: Destino del envío
+        remitente:
+          type: string
+          description: Remitente del envío
+        fechaEnvio:
+          type: string
+          format: date
+          description: Fecha de envío
+        estado:
+          type: string
+          description: Estado del envío
+        ubicacionActual:
+          $ref: '#/components/schemas/Ubicacion'
+        fechaEntregaEstimada:
+          type: string
+          format: date
+          description: Fecha estimada de entrega
+        historial:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ubicacion'
+          description: Historial de ubicaciones del envío
+        cliente:
+          $ref: '#/components/schemas/Cliente'
+          description: Cliente asociado con el envío
+    Ubicacion:
+      type: object
+      properties:
+        fecha:
+          type: string
+          format: date-time
+          description: Fecha y hora de la actualización de la ubicación
+        latitude:
+          type: number
+          format: float
+          description: Latitud de la ubicación
+        longitude:
+          type: number
+          format: float
+          description: Longitud de la ubicación
+        estado:
+          type: string
+          description: Estado del envío en esa ubicación
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID del cliente
+        nombre:
+          type: string
+          description: Nombre del cliente
+        direccion:
+          type: string
+          description: Dirección del cliente
+        telefono:
+          type: string
+          description: Teléfono del cliente
+        email:
+          type: string
+          format: email
+          description: Email del cliente
